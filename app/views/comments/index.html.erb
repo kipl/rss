@@ -1,0 +1,24 @@
+<div class="commentsList">
+	<%= page_title "Comments" %>
+	
+		<% for comment in @comments %>
+			<div class="comment whiteBackground" id="comment<%= comment.id %>">
+				<div class="title">
+					<%= link_to comment.title, comment.commentable %>
+					By <%= h comment.name %>
+				</div>
+				<div class="date"><%= comment.created_at.pretty %></div>
+				<div class="clearBoth"></div>
+				<div class="commentBody"><%= h comment.comment %></div>
+				
+				<% if admin_logged_in?%>
+					<div class="delete">
+						<%= link_to 'Destroy', { :action => 'remove', :id => comment.id } , { :class => 'deleteComment' } %>
+					</div>
+				<% end %>
+			</div>
+			
+		<% end %>
+		
+		<%= will_paginate @comments %>
+</div>

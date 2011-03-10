@@ -1,0 +1,25 @@
+<%= page_title 'Add an RSS feed'%>
+<%= meta_description "Promote your RSS feed by adding it to the People's feed"%>
+<%= error_messages_for :feed %>
+
+<div class="addFeedGuidlines whiteBackground">
+<p>
+	Please be respectful of our readers and refrain from using
+	inappropriate or offensive language.  The People's Feed
+	values and encourage the opinions of our users, but please keep
+	comments appropriate for all ages.  Thanks!!
+</p>
+</div>
+
+<div class="addFeed">
+	
+	Simply type in the URL to the feed you want to add.  
+	<br />For example:
+	<pre>"http://www.somenewsplace.com/rss-feed.xml"</pre>
+	<br />
+	
+	<% form_for :feed, @feed, :url => { :action => 'create' } do |f| %>
+		<%= f.text_field :feed_url %>
+		<%= submit_tag 'Add' %>
+	<% end %>
+</div>

@@ -1,0 +1,44 @@
+<% meta_description "RSS feeds provided by '#{@feed.title}'"%>
+<div class="feedShow">
+	<table class="feedInfo">
+		<tr>
+			<td colspan="2" class="title">
+				<%= image_tag @feed.image_url if @feed.image_url %>
+				<%= page_title (@feed.title || "" ) + " RSS Feed" %>
+			</td>
+		</tr>
+		<tr>
+			<td class="leftColumn"><b>Last Updated:</b> <%= @feed.updated_at.pretty%></td>
+			<td><h2><%= @feed.description %></h2></td>
+		</tr>
+		<tr>
+			<td class="leftColumn"><%= @feed.feed_items.count.to_s + ' ' + 'Articles'.pluralize %></td>
+			<td>
+				<a class="tooltip" title="The People's Feed uses a rating system to help determine which feeds are the most popular in the overal scheme of things.  Rather than using a closed, proprietary system like Google, we use an open ratings system.  This allows the community at large to have input on the most effective ratings.">
+				<b>Rating: </b> <%= sprintf('%.1f', @feed.rating) unless @feed.rating.nil? %>
+				<span class="whatIsThis">(what is this)</span>
+			</td>
+		</tr>
+	</table>
+	
+	<div class="adminControls">
+		<% if admin_logged_in? %>
+		    <%= link_to 'Delete', :controller => 'feed', :action => 'remove_feed', :id => @feed.id %>
+		<% end %>
+	</div>
+
+    <%= render :partial => 'shared/participate', :locals => { :post_location => '/feed_comment', :item => @feed }%>
+
+	<h2>Articles From This Feed</h2>
+
+	<ul>
+		<% @feed_items.each { |item| %>
+			<li>
+				<%= link_to h(item.title.fix_html), item %>
+			</li>
+		<% } %>
+	</ul>
+	<div class="pagination">
+		<%= will_paginate @feed_items %>
+	</div>
+</div>

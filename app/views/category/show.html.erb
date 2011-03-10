@@ -1,0 +1,20 @@
+<% meta_description "RSS Feed articles related to '#{@category.name.capitalize_each_word}'"%>
+<div class="categoryShow">
+	<div class="sectionHeading">
+		<%= page_title "Articles related to '#{@category.name.capitalize_each_word}'"%>
+	</div>
+	<div class="moreInformation">
+	</div>
+	
+	<div class="feedItems">
+		<% @feed_items.each{ |feedItem| %>
+			<%= render :partial => 'shared/feed_item_wide', :locals => {:feedItem => feedItem} %>	
+		<% } %>
+	</div>
+	
+	<div class="pagination">
+		<%= will_paginate @feed_items %>
+	</div>
+	
+	<%= render :partial => 'shared/participate', :locals => { :post_location => '/category_comment', :item => @category }%>
+</div>

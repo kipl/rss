@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<%= stylesheet_link_tag 'main' %>
+        <meta name="verify-v1" content="qnzsIVoN1EFhSa6I3djN8bQ0o9x+L1NZp/eJ6C6XCao=" ></meta>
+	<title>
+		<%= "#@page_title - " if !@page_title.nil? %> The People's Feed
+	</title>
+	<% if !@meta_description.nil? %>
+		<meta name="description" content="<%= @meta_description %>" />
+	<% end %>
+	<%= javascript_include_tag "jquery-1.3.2.min.js" %>
+	<%= javascript_include_tag "jquery.bgiframe.js" %>
+	<%= javascript_include_tag "jquery.delegate.js" %>
+	<%= javascript_include_tag "jquery.tooltip.min.js" %>
+	<%= javascript_include_tag "jquery.dimensions.js"%>
+	<%= javascript_include_tag "jquery.pngFix.js"%>
+	<%= javascript_include_tag "main.js" %>
+	
+	<%= yield(:head)%>
+</head>
+<body>
+	<div class="header">
+		<% link_to '/' do %>
+			<img src="/images/header_logo.png" alt="The People's Feed" class="logo" />
+		<% end %>
+		<div class="motto">The latest news ranked according to its popularity by YOU</div>
+		
+		<%= render :partial => 'shared/main_menu_insert' %>
+	</div>
+	<div class="body">
+		<div class="centerColumn">
+			<div class="flashes">
+				<% if flash.has_key?(:error) %>
+					<div class="error">
+						<%= flash[:error] %>
+					</div>
+				<% end %>
+				<% if flash.has_key?(:notice) %>
+					<div class="notice">
+						<%= flash[:notice] %>
+					</div>
+				<% end %>
+			</div>
+			
+			<%= yield %>
+		</div>
+		<div class="rightHandList">
+			<div>
+				<script type="text/javascript"><!--
+				google_ad_client = "pub-7279077462237001";
+				/* Peoples&#39; Feed: Top Right Nav */
+				google_ad_slot = "5558791084";
+				google_ad_width = 180;
+				google_ad_height = 150;
+				//-->
+				</script>
+				<script type="text/javascript"
+				src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+				</script>
+			</div>
+			<% cache(:controller => 'homepage', :action => 'homepage', :left_navigation => 'top_feeds') do %>
+				<h3>Top Feeds</h3>
+			
+				<%= render :partial => 'shared/feed_narrow', :locals => { :topFeeds => @topFeeds } %>
+			<% end %>
+
+			<% cache(:controller => 'homepage', :action => 'homepage', :left_navigation => 'top_categories') do %>
+				<h3>Top Categories</h3>
+
+				<%= render :partial => 'shared/category_narrow', :locals => { :topCategories => @topCategories } %>	
+			<% end %>
+			
+			<% cache(:controller => 'homepage', :action => 'homepage', :left_navigation => 'top_media') do %>
+				<h3>Top Media</h3>
+				
+				<%= render :partial => 'shared/media_narrow', :locals => { :topMedia => @topMedia } %>	
+			<% end %>
+			
+			<% if show_ads %>
+				<script type="text/javascript"><!--
+				google_ad_client = "pub-7279077462237001";
+				/* 160x600, created 7/7/09 */
+				google_ad_slot = "8881178843";
+				google_ad_width = 160;
+				google_ad_height = 600;
+				//-->
+				</script>
+				<script type="text/javascript"
+				src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+				</script>
+			<% end %>
+		</div>
+		<div class="clearBoth" />
+	</div>
+	<div class="footer">
+		<%= link_to 'sitemap', '/sitemap'%> | 
+		<%= link_to 'privacy', '/privacy-policy' %> | 
+		<%= link_to 'contact us', '/contact-us' %> | 
+		<%= link_to 'contribute', '/contribute' %> |
+		<%= link_to 'how it works', '/how-it-works' %>
+	</div>
+	
+	<% if show_ads %>
+		<div class="bottomAd">
+			<script type="text/javascript"><!--
+			google_ad_client = "pub-7279077462237001";
+			/* 728x90, created 7/30/09 */
+			google_ad_slot = "3484810864";
+			google_ad_width = 728;
+			google_ad_height = 90;
+			//-->
+			</script>
+			<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+			</script>
+		</div>
+	<% end %>
+	
+	<script type="text/javascript">
+	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+	try {
+	var pageTracker = _gat._getTracker("UA-9105909-1");
+	pageTracker._trackPageview();
+	} catch(err) {}</script>
+	
+	<div class="lastUpdated">
+		Last Updated: <%= 
+			FeedItem.find(:all, :conditions => "created_at = (select max(created_at) from feed_items)" )[0].created_at.pretty if FeedItem.find(:all, :conditions => "created_at = (select max(created_at) from feed_items)" ).length > 0
+		%>
+	</div>
+</body>
+</html>

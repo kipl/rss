@@ -1,0 +1,57 @@
+<div class="addComment">
+	<h3>Add a Comment</h3>
+	<div class="body">
+		<% if logged_in? %>
+			<% form_for :comment, @comment, :url => post_location do |f| %>
+			<%= f.error_messages %>
+			<%= hidden_field_tag 'commented_item_id', commented_item.id%>
+			<%= f.hidden_field :email, :value => current_user.email %>
+			<table>
+				<tr>
+					<td class="label">
+						name:
+					</td>
+					<td>
+						<%= f.text_field :name %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						title:
+					</td>
+					<td>
+						<%= f.text_field :title %>
+					</td>
+				</tr>
+				<tr>
+					<td class="label">
+						comment:
+					</td>
+					<td>
+						<%= f.text_area :comment, :size => "30x7" %>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" class="submit">		
+						<%= image_submit_tag 'add_comment.png'%>
+					</td>
+				</tr>
+			</table>
+			<% end %>
+		<% else %>
+			<div class="loginInstruction">Please login to use this functionality.</div>
+			<div class="miniLoginBox">
+				<% form_tag session_path do -%>
+					<p><label for="login">Login</label>
+					<%= text_field_tag 'login' %></p>
+
+					<p><label for="password">Password</label>
+					<%= password_field_tag 'password' %></p>
+
+
+					<p><%= submit_tag 'Log in' %></p>
+				<% end -%>
+			</div>
+		<% end %>
+	</div>
+</div>
